@@ -18,7 +18,12 @@
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="css/styles.css" rel="stylesheet" />
     <link href="css/slider.css" rel="stylesheet" />
-    
+    <style>
+    .dropdown:hover .dropdown-menu {
+        display: block;
+        margin-top: 0; // remove the gap so it doesn't close
+    }
+    </style>
 </head>
     <body class="d-flex flex-column h-100">
         <main class="flex-shrink-0">
