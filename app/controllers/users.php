@@ -6,6 +6,7 @@ include(ROOT_PATH . "/app/helpers/middleware.php");
 
 $table = 'users'; //kode serbaguna
 
+$admin_users = selectAll($table);
 
 $errors = array();
 
@@ -53,7 +54,7 @@ if (isset($_POST['create-admin'])) {
             $user_id = create($table, $_POST);
             $_SESSION['message'] = "Pengguna Admin berhasil dibuat!";
             $_SESSION['type'] = "success";
-            header('location: ' . BASE_URL . '/blog/admin/users/index.php'); // Kalo usernya admin redirect ke dashboard
+            header('location: ' . BASE_URL . '/admin/users/index.php'); // Kalo usernya admin redirect ke dashboard
             exit();
         }else {
             $_POST['admin'] = 0;
@@ -67,6 +68,7 @@ if (isset($_POST['create-admin'])) {
     } else {
         // Berfungsi menyimpan username terakhir di form agar tidak hilang jika pengguna tidak mengisi form
         $username = $_POST['username'];
+        $nama_lengkap = $_POST['nama_lengkap'];
         $admin = isset($_POST['admin']) ? 1 : 0;
         $email = $_POST['email'];
         $password = $_POST['password'];
@@ -89,7 +91,7 @@ if (isset($_POST['register-btn']) ) {
             $user_id = create($table, $_POST);
             $_SESSION['message'] = "Pengguna Admin berhasil dibuat!";
             $_SESSION['type'] = "success";
-            header('location: ' . BASE_URL . '/blog/admin/users/index.php'); // Kalo usernya admin redirect ke dashboard
+            header('location: ' . BASE_URL . '/admin/users/index.php'); // Kalo usernya admin redirect ke dashboard
             exit();
         }else {
             $_POST['admin'] = 0;
@@ -129,13 +131,14 @@ if (isset($_POST['update-user'])) {
         $count = update($table, $id, $_POST);
         $_SESSION['message'] = "Pengguna Admin berhasil di-update!";
         $_SESSION['type'] = "success";
-        header('location: ' . BASE_URL . '/blog/admin/users/index.php'); // Kalo usernya admin redirect ke dashboard
+        header('location: ' . BASE_URL . '/admin/users/index.php'); // Kalo usernya admin redirect ke dashboard
         exit();
 
 
     } else {
         // Berfungsi menyimpan username terakhir di form agar tidak hilang jika pengguna tidak mengisi form
         $username = $_POST['username'];
+        $nama_lengkap = $_POST['nama_lengkap'];
         $admin = isset($_POST['admin']) ? 1 : 0;
         $email = $_POST['email'];
         $password = $_POST['password'];
@@ -172,7 +175,7 @@ if (isset($_POST['login-btn'])) {
             
 
             if ($_SESSION['admin']) {
-                header('location: ' . BASE_URL . "/index.php"); // Kalo usernya admin redirect ke dashboard
+                header('location: ' . BASE_URL . "/admin/users/index.php"); // Kalo usernya admin redirect ke dashboard
             } else {
                 header('location: ' . BASE_URL . '/index.php'); // Hanya untuk user biasa
             }
@@ -196,6 +199,6 @@ if (isset($_GET['delete_id'])) {
     $count = delete($table, $_GET['delete_id']);
     $_SESSION['message'] = "Pengguna Admin dihapus";
     $_SESSION['type'] = "success";
-    header('location: ' . BASE_URL . '/blog/admin/users/index.php'); // Kalo usernya admin redirect ke dashboard
+    header('location: ' . BASE_URL . '/admin/users/index.php'); // Kalo usernya admin redirect ke dashboard
     exit();
 }

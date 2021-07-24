@@ -1,82 +1,250 @@
 <?php 
-include("path.php"); 
-include(ROOT_PATH . "/app/controllers/users.php");
+include("path.php"); // Root path 
+
+include(ROOT_PATH . "/app/controllers/kategori.php"); 
+include(ROOT_PATH . "/app/controllers/pagination.php"); 
+
+
+$posts = array();
+
+
+
+if (isset($_GET['t_id'])) {
+    $posts = getPostsByTopicId($_GET['t_id']);
+    $postsTitle = "Hasil kategori '" . $_GET['name'] . "'";
+} else if (isset($_POST['search-term'])) {
+    $posts = searchPosts($_POST['search-term']);
+}else {
+    $posts = getPublishedPosts();
+
+}
+
+
+
+
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
-
+<?php include(ROOT_PATH . "/app/include/header.php"); ?> 
 <?php include(ROOT_PATH . "/app/include/messages.php"); ?> 
 <?php include(ROOT_PATH . "/app/include/messagesLogin.php"); ?> 
-
-
-<!DOCTYPE html>
-<html lang="en">
-<?php include(ROOT_PATH . "/app/include/header.php"); ?> 
+            <!-- Header-->
             <!-- Header-->
             <header class="bg-dark py-5">
                 <div class="container px-5">
                     <div class="row gx-5 align-items-center justify-content-center">
                         <div class="col-lg-8 col-xl-7 col-xxl-6">
                             <div class="my-5 text-center text-xl-start">
-                                <h1 class="display-5 fw-bolder text-white mb-2">A Bootstrap 5 template for modern businesses</h1>
-                                <p class="lead fw-normal text-white-50 mb-4">Quickly design and customize responsive mobile-first sites with Bootstrap, the world’s most popular front-end open source toolkit!</p>
-                                <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
-                                    <a class="btn btn-primary btn-lg px-4 me-sm-3" href="#features">Get Started</a>
-                                    <a class="btn btn-outline-light btn-lg px-4" href="#!">Learn More</a>
+                                <h1 class="display-5 fw-bolder text-white mb-2 text-center">Live Data COVID-19 Indonesia dan Dunia</h1>
+                                <div class="card bg-dark">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between p-md-1">
+                                        <div class="d-flex flex-row">
+                                            <div class="align-self-center">
+                                            <img src="assets/indonesia.png" alt="">
+                                            </div>
+                                            <div class="ps-2">
+                                            <h4 class="text-white">Indonesia</h4>
+                                            <div><span class="text-white ps-1">Sembuh:</span><span class="mb-0 ps-1 text-white" id="data-kasus2"></span></div>
+                                            <div><span class="text-white">Meninggal:</span><span class="mb-0 ps-1 text-white" id="data-kasus3"></span></div>
+                                            </div>
+                                        </div>
+                                        <div class="align-self-center">
+                                            <h2 class="h1 mb-0 text-white" id="data-kasus1"></h2>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="container">
+                    <section>
+                        <div class="row">
+                        <div class="col-xl-6 col-md-12 mb-4">
+                            <div class="card bg-dark">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between p-md-1">
+                                    <div class="d-flex flex-row">
+                                        <div class="align-self-center">
+                                        <img src="assets/coronavirus.png" alt="">
+                                        </div>
+                                        <div class="ps-2">
+                                        <h4 class="text-white">Total Positif</h4>
+                                        <p class="mb-0 text-white">Terupdate</p>
+                                        </div>
+                                    </div>
+                                    <div class="align-self-center">
+                                        <h2 class="h1 mb-0 text-white" id="data-kasus"></h2>
+                                    </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xl-5 col-xxl-6 d-none d-xl-block text-center"><img class="img-fluid rounded-3 my-5" src="https://dummyimage.com/600x400/343a40/6c757d" alt="..." /></div>
-                    </div>
+                        <div class="col-xl-6 col-md-12 mb-4">
+                            <div class="card bg-dark">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between p-md-1">
+                                <div class="d-flex flex-row">
+                                    <div class="align-self-center">
+                                    <img src="assets/spirit.png" alt="">
+                                    </div>
+                                    <div class="ps-2">
+                                    <h4 class="text-white">Total Meninggal</h4>
+                                    <p class="mb-0 text-white">Terupdate</p>
+                                    </div>
+                                </div>
+                                <div class="align-self-center">
+                                    <h2 class="h1 mb-0 text-white" id="data-meninggal"></h2>
+                                </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-xl-6 col-md-12 mb-4">
+                            <div class="card bg-dark">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between p-md-1">
+                                <div class="d-flex flex-row">
+                                    <div class="align-self-center">
+                                    <h2 class="h1 mb-0 me-4 text-white" id="data-sembuh"></h2>
+                                    </div>
+                                    <div>
+                                    <h4 class="text-white">Total Sembuh</h4>
+                                    <p class="mb-0 text-white">Terupdate</p>
+                                    </div>
+                                </div>
+                                <div class="align-self-center">
+                                    <img src="assets/health-care.png" alt="">
+                                </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-md-12 mb-4">
+                            <div class="card bg-dark">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between p-md-1">
+                                <div class="d-flex flex-row">
+                                    <div class="align-self-center">
+                                    <h2 class="h1 mb-0 me-4 text-white">7,800,000,000</h2>
+                                    </div>
+                                    <div>
+                                    <h4 class="text-white">Total Populasi</h4>
+                                    <p class="mb-0 text-white">Terupdate</p>
+                                    </div>
+                                </div>
+                                <div class="align-self-center">
+                                    <img src="assets/crowd.png" alt="">
+                                </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section>
+                </div>
                 </div>
             </header>
-            <!-- Features section-->
-            <section class="py-5" id="features">
-                <div class="container px-5 my-5">
-                    <div class="row gx-5">
-                        <div class="col-lg-4 mb-5 mb-lg-0"><h2 class="fw-bolder mb-0">A better way to start building.</h2></div>
-                        <div class="col-lg-8">
-                            <div class="row gx-5 row-cols-1 row-cols-md-2">
-                                <div class="col mb-5 h-100">
-                                    <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-collection"></i></div>
-                                    <h2 class="h5">Featured title</h2>
-                                    <p class="mb-0">Paragraph of text beneath the heading to explain the heading. Here is just a bit more text.</p>
-                                </div>
-                                <div class="col mb-5 h-100">
-                                    <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-building"></i></div>
-                                    <h2 class="h5">Featured title</h2>
-                                    <p class="mb-0">Paragraph of text beneath the heading to explain the heading. Here is just a bit more text.</p>
-                                </div>
-                                <div class="col mb-5 mb-md-0 h-100">
-                                    <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-toggles2"></i></div>
-                                    <h2 class="h5">Featured title</h2>
-                                    <p class="mb-0">Paragraph of text beneath the heading to explain the heading. Here is just a bit more text.</p>
-                                </div>
-                                <div class="col h-100">
-                                    <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-toggles2"></i></div>
-                                    <h2 class="h5">Featured title</h2>
-                                    <p class="mb-0">Paragraph of text beneath the heading to explain the heading. Here is just a bit more text.</p>
+            <header class="bg-dark py-5">
+
+            </header>
+
+            <!-- Post Slider -->
+            <div class="post-slider">
+            <h1 class="slider-title">Berita Tentang Covid-19</h1>
+            <i class="fas fa-chevron-left prev"></i>
+            <i class="fas fa-chevron-right next"></i>
+
+            <div class="post-wrapper">
+
+            <?php foreach($posts as $post):?>
+                <div class="post">
+                <img src="<?php echo BASE_URL. '/admin/gambar/' . $post['image'];?>" alt="" class="slider-image">
+                <div class="post-info">
+                    <h4><a href="post/<?php echo $post['id']; ?>"><?php echo $post['title']?></a></h4>
+                    <i class="far fa-user"><?php echo $post['username']; ?></i>
+                    &nbsp;
+                    <i class="far fa-calendar"> <?php echo date('F j, Y', strtotime($post['created_at']));?></i>
+                </div>
+                </div>
+                <?php endforeach; ?>
+            </div>
+
+            </div>
+
+
+            <!-- Page content-->
+            <div class="container">
+                <div class="row">
+                    <!-- Blog entries-->
+                    <div class="col-lg-8">
+                        <!-- Pagination-->
+                        <nav aria-label="Pagination">
+                            <ul class="pagination justify-content-end my-4">
+                                <?php for ($i=1; $i <= $number_f_pages ; $i++): ?>
+                                    <?php if($page==$i):?>
+                                    <li class="page-item active"><a class="page-link" href="home?page=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                    <?php else:?>
+                                    <li class="page-item"><a class="page-link" href="home?page=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                                    <?php endif;?>
+                                <?php endfor; ?>
+                            </ul>
+                        </nav>
+                        <div class="row ">
+                            <h2>Informasi Terbaru</h2>
+                            <?php while ($row = mysqli_fetch_array($result)):?>
+                            <div class="card mb-4">
+                                <div class="row no-gutters">
+                                    <div class="col-md-4">
+                                        <img class="card-img h-100" src="<?php echo BASE_URL. '/admin/gambar/' . $row['image'];?>" alt="Card image cap">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="card-body">
+                                            <h2 class="card-title" style="font-size:18px;"><a href="post/<?php echo $row['id']; ?>"><?php echo $row['title'];?></a></h2>
+                                            <div class="text-muted">
+                                                <span style="font-size:12px"><i class="fas fa-user fa-fw"></i><?php echo $row['username']; ?></span>
+                                                <span style="font-size:12px"><i class="far fa-calendar-alt"></i> <?php echo date('F j, Y', strtotime($row['created_at']));?></span>
+                                            </div>
+                                            <p class="card-text"><?php echo html_entity_decode(substr($row['overview'], 0, 150).'...');?></p>
+
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                            <?php endwhile; ?>
+
                         </div>
+
                     </div>
-                </div>
-            </section>
-            <!-- Testimonial section-->
-            <div class="py-5 bg-light">
-                <div class="container px-5 my-5">
-                    <div class="row gx-5 justify-content-center">
-                        <div class="col-lg-10 col-xl-7">
-                            <div class="text-center">
-                                <div class="fs-4 mb-4 fst-italic">"Working with Start Bootstrap templates has saved me tons of development time when building new projects! Starting with a Bootstrap template just makes things easier!"</div>
-                                <div class="d-flex align-items-center justify-content-center">
-                                    <img class="rounded-circle me-3" src="https://dummyimage.com/40x40/ced4da/6c757d" alt="..." />
-                                    <div class="fw-bold">
-                                        Tom Ato
-                                        <span class="fw-bold text-primary mx-1">/</span>
-                                        CEO, Pomodoro
+                    <!-- Side widgets-->
+                    <div class="col-lg-4">
+                        <!-- Search widget-->
+                        <div class="card mb-4">
+                            <h5 class="card-header bg-dark text-white">Search</h5>
+                            <div class="card-body">
+                                <form action="search.php" method="post">
+                                    <div class="input-group">                       
+                                        <input class="form-control" name="search-term" type="text" placeholder="Enter search term..." aria-label="Enter search term..." aria-describedby="button-search" />
+                                        <button class="btn btn-primary" type="submit">Go!</button>               
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- Categories widget-->
+                        <div class="card mb-4">
+                            <h5 class="card-header bg-dark text-white">Kategori</h5>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <?php foreach ($kategoris as $key => $kategori):?>
+                                            <li><a href="<?php echo BASE_URL . '/kategori.php?t_id=' . $kategori['id'] . '&name=' . $kategori['name']?>"><?php echo $kategori['name']; ?></a></li>
+                                        <?php endforeach;?>
                                     </div>
                                 </div>
                             </div>
@@ -84,120 +252,77 @@ include(ROOT_PATH . "/app/controllers/users.php");
                     </div>
                 </div>
             </div>
-            <!-- Blog preview section-->
-            <section class="py-5">
-                <div class="container px-5 my-5">
-                    <div class="row gx-5 justify-content-center">
-                        <div class="col-lg-8 col-xl-6">
-                            <div class="text-center">
-                                <h2 class="fw-bolder">From our blog</h2>
-                                <p class="lead fw-normal text-muted mb-5">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eaque fugit ratione dicta mollitia. Officiis ad.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row gx-5">
-                        <div class="col-lg-4 mb-5">
-                            <div class="card h-100 shadow border-0">
-                                <img class="card-img-top" src="https://dummyimage.com/600x350/ced4da/6c757d" alt="..." />
-                                <div class="card-body p-4">
-                                    <div class="badge bg-primary bg-gradient rounded-pill mb-2">News</div>
-                                    <a class="text-decoration-none link-dark stretched-link" href="#!"><h5 class="card-title mb-3">Blog post title</h5></a>
-                                    <p class="card-text mb-0">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                </div>
-                                <div class="card-footer p-4 pt-0 bg-transparent border-top-0">
-                                    <div class="d-flex align-items-end justify-content-between">
-                                        <div class="d-flex align-items-center">
-                                            <img class="rounded-circle me-3" src="https://dummyimage.com/40x40/ced4da/6c757d" alt="..." />
-                                            <div class="small">
-                                                <div class="fw-bold">Kelly Rowan</div>
-                                                <div class="text-muted">March 12, 2021 &middot; 6 min read</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 mb-5">
-                            <div class="card h-100 shadow border-0">
-                                <img class="card-img-top" src="https://dummyimage.com/600x350/adb5bd/495057" alt="..." />
-                                <div class="card-body p-4">
-                                    <div class="badge bg-primary bg-gradient rounded-pill mb-2">Media</div>
-                                    <a class="text-decoration-none link-dark stretched-link" href="#!"><h5 class="card-title mb-3">Another blog post title</h5></a>
-                                    <p class="card-text mb-0">This text is a bit longer to illustrate the adaptive height of each card. Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                </div>
-                                <div class="card-footer p-4 pt-0 bg-transparent border-top-0">
-                                    <div class="d-flex align-items-end justify-content-between">
-                                        <div class="d-flex align-items-center">
-                                            <img class="rounded-circle me-3" src="https://dummyimage.com/40x40/ced4da/6c757d" alt="..." />
-                                            <div class="small">
-                                                <div class="fw-bold">Josiah Barclay</div>
-                                                <div class="text-muted">March 23, 2021 &middot; 4 min read</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 mb-5">
-                            <div class="card h-100 shadow border-0">
-                                <img class="card-img-top" src="https://dummyimage.com/600x350/6c757d/343a40" alt="..." />
-                                <div class="card-body p-4">
-                                    <div class="badge bg-primary bg-gradient rounded-pill mb-2">News</div>
-                                    <a class="text-decoration-none link-dark stretched-link" href="#!"><h5 class="card-title mb-3">The last blog post title is a little bit longer than the others</h5></a>
-                                    <p class="card-text mb-0">Some more quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                </div>
-                                <div class="card-footer p-4 pt-0 bg-transparent border-top-0">
-                                    <div class="d-flex align-items-end justify-content-between">
-                                        <div class="d-flex align-items-center">
-                                            <img class="rounded-circle me-3" src="https://dummyimage.com/40x40/ced4da/6c757d" alt="..." />
-                                            <div class="small">
-                                                <div class="fw-bold">Evelyn Martinez</div>
-                                                <div class="text-muted">April 2, 2021 &middot; 10 min read</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Call to action-->
-                    <aside class="bg-primary bg-gradient rounded-3 p-4 p-sm-5 mt-5">
-                        <div class="d-flex align-items-center justify-content-between flex-column flex-xl-row text-center text-xl-start">
-                            <div class="mb-4 mb-xl-0">
-                                <div class="fs-3 fw-bold text-white">New products, delivered to you.</div>
-                                <div class="text-white-50">Sign up for our newsletter for the latest updates.</div>
-                            </div>
-                            <div class="ms-xl-4">
-                                <div class="input-group mb-2">
-                                    <input class="form-control" type="text" placeholder="Email address..." aria-label="Email address..." aria-describedby="button-newsletter" />
-                                    <button class="btn btn-outline-light" id="button-newsletter" type="button">Sign up</button>
-                                </div>
-                                <div class="small text-white-50">We care about privacy, and will never share your data.</div>
-                            </div>
-                        </div>
-                    </aside>
-                </div>
-            </section>
+
+
+  
         </main>
-        <!-- Footer-->
-        <footer class="bg-dark py-4 mt-auto">
-            <div class="container px-5">
-                <div class="row align-items-center justify-content-between flex-column flex-sm-row">
-                    <div class="col-auto"><div class="small m-0 text-white">Copyright &copy; Your Website 2021</div></div>
-                    <div class="col-auto">
-                        <a class="link-light small" href="#!">Privacy</a>
-                        <span class="text-white mx-1">&middot;</span>
-                        <a class="link-light small" href="#!">Terms</a>
-                        <span class="text-white mx-1">&middot;</span>
-                        <a class="link-light small" href="#!">Contact</a>
-                    </div>
-                </div>
-            </div>
-        </footer>
-        <!-- Bootstrap core JS-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- Core theme JS-->
-        <script src="js/scripts.js"></script>
-    </body>
+
+
+    <?php include(ROOT_PATH . "/app/include/footer.php"); ?> 
 </html>
+<script>
+
+
+    
+    $(document).ready(function(){
+
+        //panggil fungsi menampilkan semua data global
+        semuaData();
+        dataNegara();
+
+        //untuk refresh otomatis
+        setInterval(function(){
+            semuaData();
+            dataNegara();
+        }, 3000);
+
+        function semuaData(){
+            $.ajax({
+                url : 'https://coronavirus-19-api.herokuapp.com/all',
+                success : function(data){
+                    try{
+                        var json = data;
+                        var kasus = data.cases;
+                        var meninggal = data.deaths;
+                        var sembuh = data.recovered;
+
+                        $('#data-kasus').html(kasus);
+                        $('#data-meninggal').html(meninggal);
+                        $('#data-sembuh').html(sembuh);
+
+
+
+                    }catch{
+                        alert('Error');
+                    }
+                }
+            });
+        }
+        
+        function dataNegara(){
+            $.ajax({
+                url : 'https://coronavirus-19-api.herokuapp.com/countries/indonesia',
+                success : function(data){
+                    try{
+                        var json = data;
+                        var kasus = data.cases;
+                        var meninggal = data.deaths;
+                        var sembuh = data.recovered;
+                        var aktif = data.active;
+
+                        $('#data-kasus1').html(kasus);
+                        $('#data-kasus3').html(meninggal);
+                        $('#data-kasus2').html(sembuh);
+                        $('#data-kasus4').html(sembuh);
+
+
+
+                    }catch{
+                        alert('Error');
+                    }
+                }
+            });
+        }
+    });
+</script>
 
